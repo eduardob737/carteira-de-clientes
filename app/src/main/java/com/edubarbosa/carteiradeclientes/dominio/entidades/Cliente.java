@@ -4,7 +4,7 @@ public class Cliente {
 
     public int codigo;
     public String nome;
-    public String enedereco;
+    public String endereco;
     public String email;
     public String telefone;
 
