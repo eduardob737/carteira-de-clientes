@@ -13,9 +13,7 @@ public class DadosOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(ScriptDLL.getCreateTableCliente());
-
     }
 
     @Override
