@@ -4,20 +4,29 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.edubarbosa.carteiradeclientes.database.DadosOpenHelper;
 import com.edubarbosa.carteiradeclientes.databinding.ActivityMainBinding;
+import com.edubarbosa.carteiradeclientes.dominio.entidades.Cliente;
+import com.edubarbosa.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
+    private ClienteAdapter adapter;
+    private ClienteRepositorio clienteRepositorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +40,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         criarConexao();
+
+        clienteRepositorio = new ClienteRepositorio(conexao);
+        List<Cliente> listaClientes = clienteRepositorio.buscarTodos();
+
+        adapter = new ClienteAdapter(listaClientes);
+        binding.include.rvListDados.setLayoutManager(new LinearLayoutManager(this));
+        binding.include.rvListDados.setHasFixedSize(true);
+        binding.include.rvListDados.setAdapter(adapter);
     }
 
     private void criarConexao(){
