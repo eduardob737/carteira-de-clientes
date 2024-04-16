@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.include.fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CadClienteActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         });
 
         criarConexao();
@@ -48,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
         binding.include.rvListDados.setLayoutManager(new LinearLayoutManager(this));
         binding.include.rvListDados.setHasFixedSize(true);
         binding.include.rvListDados.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            List<Cliente> listaClientes = clienteRepositorio.buscarTodos();
+            adapter = new ClienteAdapter(listaClientes);
+            binding.include.rvListDados.setAdapter(adapter);
     }
 
     private void criarConexao(){
