@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.navigation.NavController;
@@ -45,6 +46,7 @@ public class CadClienteActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         criarConexao();
+        verificaParametro();
     }
 
     private void criarConexao(){
@@ -65,12 +67,28 @@ public class CadClienteActivity extends AppCompatActivity {
         }
     }
 
-    private void confirmar() {
+    private void verificaParametro(){
+        Bundle bundle = getIntent().getExtras();
         cliente = new Cliente();
 
+        if ((bundle != null) && (bundle.containsKey("CLIENTE"))){
+            cliente = (Cliente) bundle.getSerializable("CLIENTE");
+            assert cliente != null;
+            binding.include.edtNome.setText(cliente.nome);
+            binding.include.edtEndereco.setText(cliente.endereco);
+            binding.include.edtEmail.setText(cliente.email);
+            binding.include.edtTelefone.setText(cliente.telefone);
+        }
+    }
+
+    private void confirmar() {
         if (!validaCampos()) {
             try {
-                clienteRepositorio.inserir(cliente);
+                if (cliente.codigo == 0) {
+                    clienteRepositorio.inserir(cliente);
+                } else {
+                    clienteRepositorio.alterar(cliente);
+                }
                 finish();
 
             } catch (SQLException exception) {
