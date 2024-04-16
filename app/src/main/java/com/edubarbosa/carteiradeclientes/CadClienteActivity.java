@@ -1,7 +1,12 @@
 package com.edubarbosa.carteiradeclientes;
 
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import com.edubarbosa.carteiradeclientes.database.DadosOpenHelper;
+import com.edubarbosa.carteiradeclientes.dominio.entidades.Cliente;
+import com.edubarbosa.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
@@ -26,6 +31,10 @@ import com.edubarbosa.carteiradeclientes.databinding.ActivityCadClienteBinding;
 public class CadClienteActivity extends AppCompatActivity {
 
     private ActivityCadClienteBinding binding;
+    private SQLiteDatabase conexao;
+    private DadosOpenHelper dadosOpenHelper;
+    private ClienteRepositorio clienteRepositorio;
+    private Cliente cliente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +43,56 @@ public class CadClienteActivity extends AppCompatActivity {
         binding = ActivityCadClienteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+
+        criarConexao();
     }
 
-    private void validaCampos() {
+    private void criarConexao(){
+        try {
+            dadosOpenHelper = new DadosOpenHelper(this);
+            conexao = dadosOpenHelper.getWritableDatabase();
+            Snackbar.make(binding.include.layoutContentCliente, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.action_ok, null).show();
+
+            clienteRepositorio = new ClienteRepositorio(conexao);
+
+        } catch (SQLException exception){
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setTitle(R.string.title_erro);
+            dlg.setMessage(exception.getMessage());
+            dlg.setNeutralButton(R.string.action_ok, null);
+            dlg.show();
+        }
+    }
+
+    private void confirmar() {
+        cliente = new Cliente();
+
+        if (!validaCampos()) {
+            try {
+                clienteRepositorio.inserir(cliente);
+                finish();
+
+            } catch (SQLException exception) {
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(R.string.title_erro);
+                dlg.setMessage(exception.getMessage());
+                dlg.setNeutralButton(R.string.action_ok, null);
+                dlg.show();
+            }
+        }
+    }
+
+    private boolean validaCampos() {
         String nome = binding.include.edtNome.getText().toString();
         String endereco = binding.include.edtEndereco.getText().toString();
         String email = binding.include.edtEmail.getText().toString();
         String telefone = binding.include.edtTelefone.getText().toString();
+
+        cliente.nome        = nome;
+        cliente.endereco    = endereco;
+        cliente.email       = email;
+        cliente.telefone    = telefone;
 
         boolean camposIncorretos = true;
 
@@ -63,6 +115,7 @@ public class CadClienteActivity extends AppCompatActivity {
             dlg.setNeutralButton(R.string.lbl_ok, null);
             dlg.show();
         }
+        return camposIncorretos;
     }
 
     private boolean isCampoVazio(String valor) {
@@ -85,8 +138,7 @@ public class CadClienteActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_ok) {
-            validaCampos();
-            //Toast.makeText(this, "Botão OK selecionado", Toast.LENGTH_SHORT).show();
+            confirmar();
         } else if (id == R.id.action_cancelar) {
             //Toast.makeText(this, "Botão Cancelar selecionado", Toast.LENGTH_SHORT).show();
         }
