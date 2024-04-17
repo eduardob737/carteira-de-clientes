@@ -2,13 +2,16 @@ package com.edubarbosa.carteiradeclientes;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -61,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.action_buscar);
         SearchView searchView = (SearchView) menuItem.getActionView();
         assert searchView != null;
-        searchView.setQueryHint("Procure por um nome");
+        searchView.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
+        searchView.setQueryHint("Buscar por nome");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -71,7 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                arrayAdapter.getFilter().filter(newText);
+                List<Cliente> clientesEncontrados = clienteRepositorio.pesquisarClientesPorNome(newText);
+                setupRecyclerView(clientesEncontrados);
+                if (!clientesEncontrados.isEmpty()){
+                    Log.i("TAG", "Nome: " + clientesEncontrados.get(0).nome);
+                } else {
+                    Log.i("TAG", "Nada encontrado ");
+                }
                 return false;
             }
         });
@@ -84,14 +94,6 @@ public class MainActivity extends AppCompatActivity {
         binding.rvListDados.setLayoutManager(new LinearLayoutManager(this));
         binding.rvListDados.setHasFixedSize(true);
         binding.rvListDados.setAdapter(adapter);
-
-        ArrayList<String> listaNomesClientes = new ArrayList<>();
-
-        for (int i=0; i < listaClientes.size(); i++) {
-            listaNomesClientes.add(listaClientes.get(i).nome);
-        }
-
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.linha_clientes, listaNomesClientes);
     }
 
     @Override
