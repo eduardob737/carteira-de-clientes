@@ -3,10 +3,8 @@ package com.edubarbosa.carteiradeclientes.dominio.repositorio;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.edubarbosa.carteiradeclientes.dominio.entidades.Cliente;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;

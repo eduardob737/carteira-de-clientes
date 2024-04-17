@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical">
 
@@ -12,18 +13,18 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
-        android:text="Paulo"
         android:paddingRight="16dp"
-        android:paddingLeft="16dp"/>
+        android:paddingLeft="16dp"
+        tools:text="Paulo"/>
 
     <TextView
         android:id="@+id/tv_telefone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="11 1234-5678"
         android:paddingRight="16dp"
-        android:paddingLeft="16dp"/>
+        android:paddingLeft="16dp"
+        tools:text="11 1234-5678" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"

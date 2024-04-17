@@ -1,8 +1,6 @@
-package com.edubarbosa.carteiradeclientes;
+package com.edubarbosa.carteiradeclientes.view.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,22 +8,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.edubarbosa.carteiradeclientes.R;
 import com.edubarbosa.carteiradeclientes.database.DadosOpenHelper;
 import com.edubarbosa.carteiradeclientes.databinding.ActivityMainBinding;
 import com.edubarbosa.carteiradeclientes.dominio.entidades.Cliente;
 import com.edubarbosa.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
+import com.edubarbosa.carteiradeclientes.view.ClienteAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private DadosOpenHelper dadosOpenHelper;
     private ClienteAdapter adapter;
     private ClienteRepositorio clienteRepositorio;
-    private ArrayAdapter<String> arrayAdapter;
+    public ActivityResultLauncher<Intent> activityLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +42,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
 
+        activityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), ar -> {
+                    List<Cliente> listaClientes = clienteRepositorio.buscarTodos();
+                    adapter = new ClienteAdapter(listaClientes);
+                    binding.rvListDados.setAdapter(adapter);
+                });
+
         binding.fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CadClienteActivity.class);
-            startActivityForResult(intent, 0);
+            activityLauncher.launch(intent);
         });
 
         criarConexao();
@@ -94,15 +99,6 @@ public class MainActivity extends AppCompatActivity {
         binding.rvListDados.setLayoutManager(new LinearLayoutManager(this));
         binding.rvListDados.setHasFixedSize(true);
         binding.rvListDados.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-            List<Cliente> listaClientes = clienteRepositorio.buscarTodos();
-            adapter = new ClienteAdapter(listaClientes);
-            binding.rvListDados.setAdapter(adapter);
     }
 
     private void criarConexao(){

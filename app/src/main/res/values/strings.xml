@@ -15,4 +15,5 @@
     <string name="title_erro">Erro</string>
     <string name="title_menu_excluir">Excluir</string>
     <string name="title_menu_buscar">Buscar</string>
+    <string name="title_carteira_de_clientes">Carteira de Clientes</string>
 </resources>

@@ -1,20 +1,27 @@
-package com.edubarbosa.carteiradeclientes;
+package com.edubarbosa.carteiradeclientes.view;
 
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.edubarbosa.carteiradeclientes.databinding.ActivityCadClienteBinding;
+import com.edubarbosa.carteiradeclientes.R;
 import com.edubarbosa.carteiradeclientes.dominio.entidades.Cliente;
+import com.edubarbosa.carteiradeclientes.view.activities.CadClienteActivity;
+import com.edubarbosa.carteiradeclientes.view.activities.MainActivity;
 
 import java.util.List;
 
@@ -67,9 +74,7 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
 
                     Intent intent = new Intent(context, CadClienteActivity.class);
                     intent.putExtra("CLIENTE", cliente);
-
-                    ((AppCompatActivity) context).startActivityForResult(intent, 0);
-
+                    ((MainActivity) context).activityLauncher.launch(intent);
                 }
             });
 
