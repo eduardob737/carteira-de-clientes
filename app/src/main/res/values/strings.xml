@@ -14,4 +14,5 @@
     <string name="action_ok">OK</string>
     <string name="title_erro">Erro</string>
     <string name="title_menu_excluir">Excluir</string>
+    <string name="title_menu_buscar">Buscar</string>
 </resources>

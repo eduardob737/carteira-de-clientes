@@ -1,26 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fitsSystemWindows="true"
     tools:context=".CadClienteActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:background="#3F51B5"
             app:title="Carteira de Clientes"
+            app:titleTextColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include android:id="@+id/include" layout="@layout/content_activity_cad_cliente" />
+        <TextView
+            android:id="@+id/tv_nome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/lbl_nome"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_layout" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <EditText
+            android:id="@+id/edt_nome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/tv_nome"
+            app:layout_constraintStart_toStartOf="@+id/tv_nome"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nome" />
+
+        <TextView
+            android:id="@+id/tv_endereco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/lbl_endereco"
+            app:layout_constraintEnd_toEndOf="@+id/edt_nome"
+            app:layout_constraintStart_toStartOf="@+id/edt_nome"
+            app:layout_constraintTop_toBottomOf="@+id/edt_nome" />
+
+        <EditText
+            android:id="@+id/edt_endereco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/tv_endereco"
+            app:layout_constraintStart_toStartOf="@+id/tv_endereco"
+            app:layout_constraintTop_toBottomOf="@+id/tv_endereco" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/lbl_email"
+            app:layout_constraintEnd_toEndOf="@+id/edt_endereco"
+            app:layout_constraintStart_toStartOf="@+id/edt_endereco"
+            app:layout_constraintTop_toBottomOf="@+id/edt_endereco" />
+
+        <EditText
+            android:id="@+id/edt_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="@+id/tv_email"
+            app:layout_constraintStart_toStartOf="@+id/tv_email"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+
+        <TextView
+            android:id="@+id/tv_telefone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/lbl_telefone"
+            app:layout_constraintEnd_toEndOf="@+id/edt_email"
+            app:layout_constraintStart_toStartOf="@+id/edt_email"
+            app:layout_constraintTop_toBottomOf="@+id/edt_email" />
+
+        <EditText
+            android:id="@+id/edt_telefone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone"
+            app:layout_constraintEnd_toEndOf="@+id/tv_telefone"
+            app:layout_constraintStart_toStartOf="@+id/tv_telefone"
+            app:layout_constraintTop_toBottomOf="@+id/tv_telefone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

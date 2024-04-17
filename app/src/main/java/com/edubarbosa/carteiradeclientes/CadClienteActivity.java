@@ -56,7 +56,7 @@ public class CadClienteActivity extends AppCompatActivity {
         try {
             dadosOpenHelper = new DadosOpenHelper(this);
             conexao = dadosOpenHelper.getWritableDatabase();
-            Snackbar.make(binding.include.layoutContentCliente, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_LONG)
+            Snackbar.make(binding.constraintLayout, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_LONG)
                     .setAction(R.string.action_ok, null).show();
 
             clienteRepositorio = new ClienteRepositorio(conexao);
@@ -77,10 +77,10 @@ public class CadClienteActivity extends AppCompatActivity {
         if ((bundle != null) && (bundle.containsKey("CLIENTE"))){
             cliente = (Cliente) bundle.getSerializable("CLIENTE");
             assert cliente != null;
-            binding.include.edtNome.setText(cliente.nome);
-            binding.include.edtEndereco.setText(cliente.endereco);
-            binding.include.edtEmail.setText(cliente.email);
-            binding.include.edtTelefone.setText(cliente.telefone);
+            binding.edtNome.setText(cliente.nome);
+            binding.edtEndereco.setText(cliente.endereco);
+            binding.edtEmail.setText(cliente.email);
+            binding.edtTelefone.setText(cliente.telefone);
         }
     }
 
@@ -105,10 +105,10 @@ public class CadClienteActivity extends AppCompatActivity {
     }
 
     private boolean validaCampos() {
-        String nome = binding.include.edtNome.getText().toString();
-        String endereco = binding.include.edtEndereco.getText().toString();
-        String email = binding.include.edtEmail.getText().toString();
-        String telefone = binding.include.edtTelefone.getText().toString();
+        String nome = binding.edtNome.getText().toString();
+        String endereco = binding.edtEndereco.getText().toString();
+        String email = binding.edtEmail.getText().toString();
+        String telefone = binding.edtTelefone.getText().toString();
 
         cliente.nome        = nome;
         cliente.endereco    = endereco;
@@ -118,13 +118,13 @@ public class CadClienteActivity extends AppCompatActivity {
         boolean camposIncorretos = true;
 
         if (isCampoVazio(nome)) {
-            binding.include.edtNome.requestFocus();
+            binding.edtNome.requestFocus();
         } else if (isCampoVazio(endereco)) {
-            binding.include.edtEndereco.requestFocus();
+            binding.edtEndereco.requestFocus();
         } else if (!isEmailValido(email)) {
-            binding.include.edtEmail.requestFocus();
+            binding.edtEmail.requestFocus();
         } else if (isCampoVazio(telefone)) {
-            binding.include.edtTelefone.requestFocus();
+            binding.edtTelefone.requestFocus();
         } else {
             camposIncorretos = false;
         }
