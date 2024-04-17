@@ -64,7 +64,6 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
             itemView.setOnClickListener(view -> {
                 if (!dados.isEmpty()) {
                     Cliente cliente = dados.get(getLayoutPosition());
-                    Toast.makeText(context, "Cliente: " + cliente.nome, Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(context, CadClienteActivity.class);
                     intent.putExtra("CLIENTE", cliente);

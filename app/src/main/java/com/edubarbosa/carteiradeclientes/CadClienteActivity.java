@@ -29,6 +29,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.edubarbosa.carteiradeclientes.databinding.ActivityCadClienteBinding;
 
+import java.util.Objects;
+
 public class CadClienteActivity extends AppCompatActivity {
 
     private ActivityCadClienteBinding binding;
@@ -44,6 +46,7 @@ public class CadClienteActivity extends AppCompatActivity {
         binding = ActivityCadClienteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         criarConexao();
         verificaParametro();
@@ -157,8 +160,11 @@ public class CadClienteActivity extends AppCompatActivity {
 
         if (id == R.id.action_ok) {
             confirmar();
-        } else if (id == R.id.action_cancelar) {
-            //Toast.makeText(this, "Botão Cancelar selecionado", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_excluir) {
+            clienteRepositorio.excluir(cliente.codigo);
+            finish();
+        } else if (id == android.R.id.home){
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
