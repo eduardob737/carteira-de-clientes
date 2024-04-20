@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -49,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
         activityLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), ar -> {
                     List<Cliente> listaClientes = clienteRepositorio.buscarTodos();
-                    adapter = new ClienteAdapter(listaClientes);
-                    binding.rvListDados.setAdapter(adapter);
+                    setupRecyclerView(listaClientes, R.string.lbl_msg_carteira_vazia);
                 });
 
         binding.fab.setOnClickListener(view -> {
@@ -63,29 +64,8 @@ public class MainActivity extends AppCompatActivity {
         clienteRepositorio = new ClienteRepositorio(conexao);
         List<Cliente> listaClientes = clienteRepositorio.buscarTodos();
 
-        setupRecyclerView(listaClientes);
+        setupRecyclerView(listaClientes, R.string.lbl_msg_carteira_vazia);
     }
-
-    private void gerarArquivoDB() {
-            File f = new File("/data/data/com.edubarbosa.carteiradeclientes/databases/DADOS");
-
-            try (FileInputStream fis = new FileInputStream(f);
-                 FileOutputStream fos = new FileOutputStream("/storage/emulated/0/app_developer/db2")) {
-                while (true) {
-                    int i = fis.read();
-                    if (i != -1) {
-                        fos.write(i);
-                    } else {
-                        break;
-                    }
-                }
-                fos.flush();
-                Toast.makeText(this, "DB dump OK", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, "DB dump ERROR", Toast.LENGTH_LONG).show();
-            }
-        }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menuItem.getActionView();
         assert searchView != null;
         searchView.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
-        searchView.setQueryHint("Buscar por nome");
+        searchView.setQueryHint(getString(R.string.hint_buscar_nome));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -106,12 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 List<Cliente> clientesEncontrados = clienteRepositorio.pesquisarClientesPorNome(newText);
-                setupRecyclerView(clientesEncontrados);
-                if (!clientesEncontrados.isEmpty()) {
-                    Log.i("TAG", "Nome: " + clientesEncontrados.get(0).nome);
-                } else {
-                    Log.i("TAG", "Nada encontrado ");
-                }
+                setupRecyclerView(clientesEncontrados, R.string.lbl_msg_busca_vazia);
                 return false;
             }
         });
@@ -119,11 +94,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void setupRecyclerView(List<Cliente> listaClientes) {
+    private void setupRecyclerView(List<Cliente> listaClientes, @StringRes int mensagemListaVazia) {
         adapter = new ClienteAdapter(listaClientes);
         binding.rvListDados.setLayoutManager(new LinearLayoutManager(this));
         binding.rvListDados.setHasFixedSize(true);
         binding.rvListDados.setAdapter(adapter);
+
+        if (listaClientes.isEmpty()){
+            binding.tvListaVazia.setText(mensagemListaVazia);
+            binding.tvListaVazia.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvListaVazia.setVisibility(View.GONE);
+        }
     }
 
     private void criarConexao() {

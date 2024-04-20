@@ -17,4 +17,14 @@
     <string name="title_menu_buscar">Buscar</string>
     <string name="title_carteira_de_clientes">Carteira de Clientes</string>
     <string name="cd_fab_novo_cliente">Botão de adicionar um novo cliente</string>
+    <string name="dlg_cliente">"Cliente "</string>
+    <string name="dlg_excluido_sucesso">" excluído com sucesso."</string>
+    <string name="dlg_atencao">Atenção</string>
+    <string name="dlg_msg_confirmacao_exclusao">"Tem certeza que deseja excluir o cliente "</string>
+    <string name="dlg_action_sim">SIM</string>
+    <string name="dlg_action_cancelar">CANCELAR</string>
+    <string name="dlg_ponto_interrogacao">\?</string>
+    <string name="hint_buscar_nome">Buscar por nome</string>
+    <string name="lbl_msg_busca_vazia">Nenhum registro foi localizado, \ntente novamente.</string>
+    <string name="lbl_msg_carteira_vazia">Sua carteira está vazia, crie um novo \nregistro apertando no botão + </string>
 </resources>

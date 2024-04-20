@@ -51,6 +51,19 @@
             android:layout_height="wrap_content"
             android:id="@+id/secondary_constraint">
 
+            <TextView
+                android:id="@+id/tv_lista_vazia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="40dp"
+                android:lineSpacingExtra="2dp"
+                android:textAlignment="center"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="@string/lbl_msg_lista_vazia" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_list_dados"
                 android:layout_width="match_parent"

@@ -5,7 +5,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,14 +20,12 @@ import com.edubarbosa.carteiradeclientes.database.DadosOpenHelper;
 import com.edubarbosa.carteiradeclientes.databinding.ActivityCadClienteBinding;
 import com.edubarbosa.carteiradeclientes.dominio.entidades.Cliente;
 import com.edubarbosa.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
 public class CadClienteActivity extends AppCompatActivity {
 
     private ActivityCadClienteBinding binding;
-    private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
     private ClienteRepositorio clienteRepositorio;
     private Cliente cliente;
@@ -49,7 +46,7 @@ public class CadClienteActivity extends AppCompatActivity {
     private void criarConexao(){
         try {
             dadosOpenHelper = new DadosOpenHelper(this);
-            conexao = dadosOpenHelper.getWritableDatabase();
+            SQLiteDatabase conexao = dadosOpenHelper.getWritableDatabase();
             clienteRepositorio = new ClienteRepositorio(conexao);
 
         } catch (SQLException exception){
@@ -164,15 +161,15 @@ public class CadClienteActivity extends AppCompatActivity {
     private AlertDialog.Builder setupAlertDialog() {
         DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> {
             clienteRepositorio.excluir(cliente.codigo);
-            Toast.makeText(this, "Cliente " + cliente.nome + " excluído com sucesso.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.dlg_cliente) + cliente.nome + getString(R.string.dlg_excluido_sucesso), Toast.LENGTH_SHORT).show();
             finish();
         };
 
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle("Atenção");
-        dlg.setMessage("Tem certeza que deseja excluir o cliente " + cliente.nome + "?");
-        dlg.setPositiveButton("SIM", positiveListener);
-        dlg.setNegativeButton("CANCELAR", null);
+        dlg.setTitle(R.string.dlg_atencao);
+        dlg.setMessage(getString(R.string.dlg_msg_confirmacao_exclusao) + cliente.nome + getString(R.string.dlg_ponto_interrogacao));
+        dlg.setPositiveButton(R.string.dlg_action_sim, positiveListener);
+        dlg.setNegativeButton(R.string.dlg_action_cancelar, null);
         return dlg;
     }
 }
