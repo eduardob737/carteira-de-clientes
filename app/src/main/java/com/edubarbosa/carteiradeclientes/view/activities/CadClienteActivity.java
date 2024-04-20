@@ -1,13 +1,16 @@
 package com.edubarbosa.carteiradeclientes.view.activities;
 
+import android.content.DialogInterface;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -47,9 +50,6 @@ public class CadClienteActivity extends AppCompatActivity {
         try {
             dadosOpenHelper = new DadosOpenHelper(this);
             conexao = dadosOpenHelper.getWritableDatabase();
-            Snackbar.make(binding.constraintLayout, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.action_ok, null).show();
-
             clienteRepositorio = new ClienteRepositorio(conexao);
 
         } catch (SQLException exception){
@@ -152,12 +152,27 @@ public class CadClienteActivity extends AppCompatActivity {
         if (id == R.id.action_ok) {
             confirmar();
         } else if (id == R.id.action_excluir) {
-            clienteRepositorio.excluir(cliente.codigo);
-            finish();
+            AlertDialog.Builder dlg = setupAlertDialog();
+            dlg.show();
         } else if (id == android.R.id.home){
             finish();
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    private AlertDialog.Builder setupAlertDialog() {
+        DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> {
+            clienteRepositorio.excluir(cliente.codigo);
+            Toast.makeText(this, "Cliente " + cliente.nome + " excluído com sucesso.", Toast.LENGTH_SHORT).show();
+            finish();
+        };
+
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle("Atenção");
+        dlg.setMessage("Tem certeza que deseja excluir o cliente " + cliente.nome + "?");
+        dlg.setPositiveButton("SIM", positiveListener);
+        dlg.setNegativeButton("CANCELAR", null);
+        return dlg;
     }
 }

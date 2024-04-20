@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,6 +25,9 @@ import com.edubarbosa.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
 import com.edubarbosa.carteiradeclientes.view.ClienteAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +66,27 @@ public class MainActivity extends AppCompatActivity {
         setupRecyclerView(listaClientes);
     }
 
+    private void gerarArquivoDB() {
+            File f = new File("/data/data/com.edubarbosa.carteiradeclientes/databases/DADOS");
+
+            try (FileInputStream fis = new FileInputStream(f);
+                 FileOutputStream fos = new FileOutputStream("/storage/emulated/0/app_developer/db2")) {
+                while (true) {
+                    int i = fis.read();
+                    if (i != -1) {
+                        fos.write(i);
+                    } else {
+                        break;
+                    }
+                }
+                fos.flush();
+                Toast.makeText(this, "DB dump OK", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "DB dump ERROR", Toast.LENGTH_LONG).show();
+            }
+        }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -82,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 List<Cliente> clientesEncontrados = clienteRepositorio.pesquisarClientesPorNome(newText);
                 setupRecyclerView(clientesEncontrados);
-                if (!clientesEncontrados.isEmpty()){
+                if (!clientesEncontrados.isEmpty()) {
                     Log.i("TAG", "Nome: " + clientesEncontrados.get(0).nome);
                 } else {
                     Log.i("TAG", "Nada encontrado ");
@@ -101,14 +126,12 @@ public class MainActivity extends AppCompatActivity {
         binding.rvListDados.setAdapter(adapter);
     }
 
-    private void criarConexao(){
+    private void criarConexao() {
         try {
             dadosOpenHelper = new DadosOpenHelper(this);
             conexao = dadosOpenHelper.getWritableDatabase();
-            Snackbar.make(binding.constraintMain, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.action_ok, null).show();
-
-        } catch (SQLException exception){
+            Snackbar.make(binding.constraintMain, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_SHORT).show();
+        } catch (SQLException exception) {
             AlertDialog.Builder dlg = new AlertDialog.Builder(this);
             dlg.setTitle(R.string.title_erro);
             dlg.setMessage(exception.getMessage());

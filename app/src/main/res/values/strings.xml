@@ -16,4 +16,5 @@
     <string name="title_menu_excluir">Excluir</string>
     <string name="title_menu_buscar">Buscar</string>
     <string name="title_carteira_de_clientes">Carteira de Clientes</string>
+    <string name="cd_fab_novo_cliente">Botão de adicionar um novo cliente</string>
 </resources>
